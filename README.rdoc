@@ -1,6 +1,6 @@
 = rgroups
 
-Description goes here.
+Ruby API for accessing/updating Google Groups - based on Mechanize. This essentially just screen-scrapes Google Groups and automates clicking on things. It's not entirely efficient, but it sure beats having to script it yourself.
 
 == Contributing to rgroups
  

@@ -17,8 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "rgroups"
   gem.homepage = "http://github.com/ahayworth/rgroups"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Ruby API for accessing/updating Google Groups - based on Mechanize}
+  gem.description = %Q{This is a Ruby API for accessing and updating Google Groups. It's based on Mechanize, which means it's essentially screen-scraping.}
   gem.email = "ahayworth@gmail.com"
   gem.authors = ["Andrew Hayworth"]
   # dependencies defined in Gemfile
