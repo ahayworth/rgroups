@@ -2,6 +2,28 @@
 
 Ruby API for accessing/updating Google Groups - based on Mechanize. This essentially just screen-scrapes Google Groups and automates clicking on things. It's not entirely efficient, but it sure beats having to script it yourself.
 
+== Usage
+Setup is easy!
+ require 'rgroups'
+ rg = RGroup.new
+ rg.login('username', 'password')
+
+Or, if you're using Google Apps for your Domain (GAFYD):
+ rg = RGroup.new('mydomain.com')
+ rg.login('username', 'password')
+
+Adding a user to a group:
+ rg.add_user('address@domain.com', 'group', :message => 'message to send to invitees')
+
+Adding a user directly (only for GAFYD accounts):
+ rg.add_user('address@mydomain.com', 'group', :mode => 'direct', :notify => true, :message => 'message to send to people', :delivery => 'digest')
+
+Modifying a user's delivery options:
+ rg.update_user('address@domain.com', 'group', 'set_delivery', :value => 'summary')
+
+Modifying a user's membership type:
+ rg.update_user('address@domain.com', 'group', 'set_member', :value => 'manager')
+ 
 == Contributing to rgroups
  
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.
