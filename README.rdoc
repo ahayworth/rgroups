@@ -23,6 +23,9 @@ Modifying a user's delivery options:
 
 Modifying a user's membership type:
  rg.update_user('address@domain.com', 'group', 'set_member', :value => 'manager')
+
+== Notes
+This relies on the 'old style' Google Groups. Please ensure that your group is using the old style before reporting a bug. Support for the new style should come soon...
  
 == Contributing to rgroups
  
