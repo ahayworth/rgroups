@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "rgroups"
-  s.version = "0.1.0"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Andrew Hayworth"]
-  s.date = "2012-06-17"
+  s.date = "2012-06-18"
   s.description = "This is a Ruby API for accessing and updating Google Groups. It's based on Mechanize, which means it's essentially screen-scraping."
   s.email = "ahayworth@gmail.com"
   s.extra_rdoc_files = [
@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION",
     "lib/rgroups.rb",
+    "rgroups.gemspec",
     "test/helper.rb",
     "test/test_rgroups.rb"
   ]
