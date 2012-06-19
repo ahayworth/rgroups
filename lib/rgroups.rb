@@ -10,17 +10,23 @@ class RGroup
 	@@POST_SETTINGS = '/manage_post'
 	@@ADV_SETTINGS = '/manage_advanced'
 	@@SPAM_SETTINGS = '/manage_spam'
+	@@BASE = 'https://groups.google.com'
+	@@GAFYD_BASE = 'https://groups.google.com/a/'
+	@@SUBS = '/groups/mysubs'
 	
     def initialize(*gafyd)
         @scraper = Mechanize.new
         @scraper.reuse_ssl_sessions = false
         if (gafyd.length == 0) 
-            @BASE_URL = 'https://groups.google.com/group/'
+        	@LIST_GROUPS = @@BASE + @@SUBS
+            @BASE_URL = @@BASE + '/group/'
             @LOGIN_URL = 'https://accounts.google.com/ServiceLogin?service=groups2&passive=1209600&continue=https://groups.google.com/&followup=https://groups.google.com/'
         else
-            @BASE_URL = 'https://groups.google.com/a/' + gafyd[0] + "/group/"
-            @LOGIN_URL = 'https://groups.google.com/a/' + gafyd[0]
-            @GAFYD = true
+        	@GAFYD = true
+            @GAFYD_DOMAIN = gafyd[0]
+        	@LIST_GROUPS = @@GAFYD_BASE + @GAFYD_DOMAIN + @@SUBS
+            @BASE_URL = @@GAFYD_BASE + @GAFYD_DOMAIN + "/group/"
+            @LOGIN_URL = @@GAFYD_BASE + @GAFYD_DOMAIN
         end
     end
 	
@@ -32,6 +38,79 @@ class RGroup
         f.Passwd = password
         @scraper.submit(f, f.buttons.first)
     end
+	
+	# groups that the logged-in user is subscribed to
+	def subscribed_groups
+		page = @scraper.get(@LIST_GROUPS)
+		groups = []
+		page.search('//a[@class="on"]').each do |link|
+			parts = link[:href].split("/")
+			groups << parts[parts.length - 1]
+		end
+		
+		groups
+	end
+	
+	#search groups
+	#listing groups is not easy when scraping
+	#instead, you can search for one
+	#returns first 15 results, anything else is real slow
+	def search_groups(group)
+		if (@GAFYD)
+			page = @scraper.get(@@GAFYD_BASE + @GAFYD_DOMAIN)
+		else
+			page = @scraper.get(@@BASE)
+		end
+		
+		form = page.form('gs2')
+		form.q = group
+		page = @scraper.submit(form, form.button_with(:name => "qt_s"))
+		groups = []
+		page.search('//a[@class="on"]').each do |link|
+			parts = link[:href].split("/")
+			parts = parts[parts.length - 1].split("?")
+			groups << parts[0] unless parts[0].eql?("advanced_search")
+		end
+		
+		return nil if groups.length == 0
+		groups
+	end
+	
+	#post a message to groups
+	def post_message(group, subject, message, send_copy=false, cc='')
+		page = @scraper.get(@BASE_URL + group + '/topics')
+		if (@GAFYD)
+			form = page.form_with(:action => '/a/' + @GAFYD_DOMAIN + '/group/' + group + "/post")
+		else
+			form = page.form_with(:action =>  "/group/" + group + "/post")
+		end
+		page = @scraper.submit(form, form.button_with(:value => "+ New post"))
+		
+		form = page.form('postform')
+		form.cc = cc
+		form.subject = subject
+		form.body = message
+		
+		if (send_copy)
+			form.checkbox_with(:name => 'bccme').check
+		end
+		
+		@scraper.submit(form, form.button_with(:name => 'Action.Post'))
+	end
+	
+	#lists the most recent topics in a group
+	def get_topics(group)
+		topics = {}
+		page = @scraper.get(@BASE_URL + group + '/topics?gvc=2')
+		page.search('//div[@class="maincontoutboxatt"]//table//a').each do |link|
+			unless(link[:class] == "st")
+				topics[link.inner_text.strip] = @@BASE + link[:href]
+			end
+		end
+		
+		topics
+	end
+	
 	
 	# add a user
 	# email = email address to add
