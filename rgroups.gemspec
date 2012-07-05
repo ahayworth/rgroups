@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Andrew Hayworth"]
-  s.date = "2012-06-19"
+  s.date = "2012-07-05"
   s.description = "This is a Ruby API for accessing and updating Google Groups. It's based on Mechanize, which means it's essentially screen-scraping."
   s.email = "ahayworth@gmail.com"
   s.extra_rdoc_files = [
