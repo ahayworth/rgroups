@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'mechanize'
 
 
@@ -49,6 +50,16 @@ class RGroup
 		end
 		
 		groups
+	end
+	
+	def list_members(group)
+		page = @scraper.get(@BASE_URL + group + @@MANAGE)
+		member_set = page.search('//table[@class="memlist"]//td')
+		members = []
+		member_set.each do |m| 
+			members.push(member_set[member_set.index(m) + 1].children.text.gsub(/\302\240/, '').gsub(/-me$/, '')) if m.to_s.include?('class="cb"')
+		end 
+		return members
 	end
 	
 	#search groups
