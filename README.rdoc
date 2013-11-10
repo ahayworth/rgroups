@@ -2,6 +2,10 @@
 
 Ruby API for accessing/updating Google Groups - based on Mechanize. This essentially just screen-scrapes Google Groups and automates clicking on things. It's not entirely efficient, but it sure beats having to script it yourself.
 
+Note: As of 2013-11-09, I've found that large portions of the gem no longer work. I do not have any particular
+reason to continue maintaining it (and ew, screen scraping really is horrible). If anyone wishes to contribute,
+that's fine.
+
 == Usage
 Setup is easy!
  require 'rgroups'
